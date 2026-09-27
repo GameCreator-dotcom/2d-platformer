@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  color-scheme: dark;
+  font-family: 'Space Grotesk', sans-serif;
+  background: #18252d;
+  color: #f3f1dc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background-color: #18252d;
+  background-image: radial-gradient(#66817a 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
+}
+
+.game-shell {
+  width: min(100% - 32px, 880px);
+  padding: 24px 0;
+}
+
+.game-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.eyebrow,
+.controls {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #9db8a5;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #f3f1dc;
+  font-size: 21px;
+  font-weight: 600;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 3px solid #f3f1dc;
+  background: #9dd7c2;
+  image-rendering: pixelated;
+  box-shadow: 7px 7px 0 #0d171c;
+}
+
+.controls {
+  margin: 16px 0 0;
+  color: #c2cec0;
+  text-align: center;
+}
+
+.controls span {
+  padding: 0 8px;
+  color: #f2c14e;
+}
+
+@media (max-width: 560px) {
+  .game-heading {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+    gap: 4px;
+  }
+
+  .controls {
+    line-height: 1.8;
+  }
+}
