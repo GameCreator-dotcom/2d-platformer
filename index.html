@@ -9,12 +9,29 @@
   </head>
   <body>
     <main class="game-shell">
-      <header class="game-heading">
-        <p class="eyebrow">A tiny platform adventure</p>
-        <h1>2D Platformer</h1>
-      </header>
-      <canvas id="game" width="800" height="450" aria-label="2D platform game"></canvas>
-      <p class="controls">Move: A / D or arrow keys <span aria-hidden="true">·</span> Jump: W, up, or space <span aria-hidden="true">·</span> Reach the flag to advance</p>
+      <section id="menu-screen" class="menu-screen" aria-label="Main menu">
+        <nav class="menu-tabs" role="tablist" aria-label="Main menu">
+          <button id="play-tab" class="menu-tab" type="button" role="tab" aria-selected="true" aria-controls="play-panel" tabindex="0">play</button>
+          <button id="characters-tab" class="menu-tab" type="button" role="tab" aria-selected="false" aria-controls="characters-panel" tabindex="-1">characters</button>
+        </nav>
+        <section id="play-panel" class="menu-panel" role="tabpanel" aria-labelledby="play-tab">
+          <h1>2d platformer</h1>
+          <button id="start-button" class="start-button" type="button">start</button>
+        </section>
+        <section id="characters-panel" class="menu-panel" role="tabpanel" aria-labelledby="characters-tab" hidden>
+          <h1>characters</h1>
+        </section>
+      </section>
+      <section id="game-screen" class="game-screen" aria-label="Game" hidden>
+        <header class="game-heading">
+          <h1>2d platformer</h1>
+        </header>
+        <div class="game-stage">
+          <button id="quit-button" class="quit-button" type="button">quit</button>
+          <canvas id="game" width="800" height="450" aria-label="2D platform game"></canvas>
+        </div>
+        <p class="controls">Move: A / D or arrow keys <span aria-hidden="true">·</span> Jump: W, up, or space <span aria-hidden="true">·</span> Reach the flag to advance</p>
+      </section>
     </main>
   </body>
 </html>

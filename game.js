@@ -1,5 +1,9 @@
 const canvas = document.querySelector('#game');
 const context = canvas.getContext('2d');
+const menuScreen = document.querySelector('#menu-screen');
+const gameScreen = document.querySelector('#game-screen');
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const panels = [...document.querySelectorAll('[role="tabpanel"]')];
 
 const world = {
   width: canvas.width,
@@ -33,10 +37,13 @@ let deathCount = 0;
 let isLevelComplete = false;
 let levelTransitionTimer = 0;
 let levelNumber = 1;
+let gameStarted = false;
 let goal;
 let runSeed = createRunSeed();
 
 window.addEventListener('keydown', (event) => {
+  if (!gameStarted) return;
+
   if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'Space'].includes(event.code)) {
     event.preventDefault();
   }
@@ -256,6 +263,38 @@ function drawPlayer() {
   context.fillRect(player.x + 17, player.y + player.height - 5, 8, 5);
 }
 
+function drawHeart(x, y, size, filled) {
+  context.beginPath();
+  context.moveTo(x + size / 2, y + size * 0.92);
+  context.bezierCurveTo(x + size * 0.34, y + size * 0.76, x, y + size * 0.5, x, y + size * 0.29);
+  context.bezierCurveTo(x, y + size * 0.04, x + size * 0.32, y, x + size / 2, y + size * 0.23);
+  context.bezierCurveTo(x + size * 0.68, y, x + size, y + size * 0.04, x + size, y + size * 0.29);
+  context.bezierCurveTo(x + size, y + size * 0.5, x + size * 0.66, y + size * 0.76, x + size / 2, y + size * 0.92);
+  context.closePath();
+
+  if (filled) {
+    context.fillStyle = '#e34f4f';
+    context.fill();
+  } else {
+    context.strokeStyle = '#263e54';
+    context.lineWidth = 2;
+    context.stroke();
+  }
+}
+
+function drawLives() {
+  const remainingLives = maxDeaths - deathCount;
+
+  context.textAlign = 'right';
+  context.fillStyle = '#263e54';
+  context.font = '16px monospace';
+  context.fillText('LIVES', world.width - 108, 26);
+
+  for (let index = 0; index < maxDeaths; index += 1) {
+    drawHeart(world.width - 96 + index * 24, 8, 18, index < remainingLives);
+  }
+}
+
 function die() {
   isDead = true;
   deathCount += 1;
@@ -290,13 +329,6 @@ function draw() {
   drawGoal();
   drawPlayer();
 
-  context.textAlign = 'start';
-  context.fillStyle = '#263e54';
-  context.font = '16px monospace';
-  context.fillText(`LEVEL ${levelNumber}`, 16, 26);
-  context.textAlign = 'right';
-  context.fillText(`FALLS ${deathCount} / ${maxDeaths}`, world.width - 16, 26);
-
   if (isDead) {
     context.fillStyle = 'rgba(13, 23, 28, 0.82)';
     context.fillRect(0, 0, world.width, world.height);
@@ -308,7 +340,7 @@ function draw() {
     context.font = '16px monospace';
     const message = deathCount >= maxDeaths
       ? 'Press R to restart the game'
-      : `Deaths: ${deathCount} / ${maxDeaths} - Press R to try again`;
+      : 'Press R to try again';
     context.fillText(message, world.width / 2, world.height / 2 + 28);
     context.textAlign = 'start';
   } else if (isLevelComplete) {
@@ -320,9 +352,18 @@ function draw() {
     context.fillText(`LEVEL ${levelNumber} CLEAR`, world.width / 2, world.height / 2);
     context.textAlign = 'start';
   }
+
+  context.textAlign = 'start';
+  context.fillStyle = '#263e54';
+  context.font = '16px monospace';
+  context.fillText(`LEVEL ${levelNumber}`, 16, 26);
+  drawLives();
+  context.textAlign = 'start';
 }
 
 function frame(time) {
+  if (!gameStarted) return;
+
   const deltaTime = Math.min((time - previousTime) / 1000 || 0, 1 / 30);
   previousTime = time;
 
@@ -343,6 +384,44 @@ function frame(time) {
   requestAnimationFrame(frame);
 }
 
-loadLevel(levelNumber);
-draw();
-requestAnimationFrame(frame);
+function selectTab(selectedTab) {
+  for (const tab of tabs) {
+    const isSelected = tab === selectedTab;
+    tab.setAttribute('aria-selected', String(isSelected));
+    tab.tabIndex = isSelected ? 0 : -1;
+  }
+
+  for (const panel of panels) {
+    panel.hidden = panel.id !== selectedTab.getAttribute('aria-controls');
+  }
+}
+
+for (const [index, tab] of tabs.entries()) {
+  tab.addEventListener('click', () => selectTab(tab));
+  tab.addEventListener('keydown', (event) => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+
+    event.preventDefault();
+    const direction = event.key === 'ArrowRight' ? 1 : -1;
+    const nextTab = tabs[(index + direction + tabs.length) % tabs.length];
+    selectTab(nextTab);
+    nextTab.focus();
+  });
+}
+
+document.querySelector('#start-button').addEventListener('click', () => {
+  menuScreen.hidden = true;
+  gameScreen.hidden = false;
+  gameStarted = true;
+  restartGame();
+  previousTime = 0;
+  requestAnimationFrame(frame);
+});
+
+document.querySelector('#quit-button').addEventListener('click', () => {
+  gameStarted = false;
+  clearKeys();
+  gameScreen.hidden = true;
+  menuScreen.hidden = false;
+  selectTab(tabs[0]);
+});
