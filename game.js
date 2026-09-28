@@ -4,6 +4,30 @@ const menuScreen = document.querySelector('#menu-screen');
 const gameScreen = document.querySelector('#game-screen');
 const tabs = [...document.querySelectorAll('[role="tab"]')];
 const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+const characterCards = [...document.querySelectorAll('.character-card')];
+
+const characterPalettes = {
+  fox: { body: '#e87552', accent: '#f2c14e' },
+  robot: { body: '#6f8f9e', accent: '#9dd7c2' },
+  frog: { body: '#47765c', accent: '#bce4cb' },
+  knight: { body: '#66788d', accent: '#f3f1dc' },
+  ghost: { body: '#f3f1dc', accent: '#9dd7c2' },
+  cat: { body: '#e6a93c', accent: '#f3f1dc' },
+  slime: { body: '#78a66c', accent: '#f2c14e' },
+  bee: { body: '#f2c14e', accent: '#18252d' },
+  wizard: { body: '#9a65b5', accent: '#d6a2e8' },
+  golem: { body: '#8b7563', accent: '#a88f78' },
+  penguin: { body: '#365d4c', accent: '#f3f1dc' },
+  mushroom: { body: '#e87552', accent: '#f3f1dc' },
+  dragon: { body: '#b84f58', accent: '#f2c14e' },
+  pirate: { body: '#b56d3c', accent: '#e8b56a' },
+  bat: { body: '#765e91', accent: '#d6a2e8' },
+  alien: { body: '#4eaa7d', accent: '#f2c14e' },
+  raccoon: { body: '#747981', accent: '#f3f1dc' },
+  merfolk: { body: '#3c9ca1', accent: '#f2c14e' },
+  yeti: { body: '#b7d7dc', accent: '#7fb4d5' },
+  plant: { body: '#6c9b48', accent: '#f2c14e' },
+};
 
 const world = {
   width: canvas.width,
@@ -40,6 +64,7 @@ let levelNumber = 1;
 let gameStarted = false;
 let goal;
 let runSeed = createRunSeed();
+let selectedCharacter = 'fox';
 
 window.addEventListener('keydown', (event) => {
   if (!gameStarted) return;
@@ -254,13 +279,51 @@ function drawGoal() {
 }
 
 function drawPlayer() {
-  context.fillStyle = '#263e54';
-  context.fillRect(player.x, player.y, player.width, player.height);
+  const palette = characterPalettes[selectedCharacter];
+  const centerX = player.x + player.width / 2;
+
+  context.fillStyle = '#18252d';
+  context.fillRect(player.x + 3, player.y + 18, player.width - 6, player.height - 12);
+  context.fillStyle = palette.body;
+  context.fillRect(player.x + 4, player.y + 3, player.width - 8, 20);
+  context.fillRect(player.x + 2, player.y + 20, player.width - 4, 12);
+
+  if (['fox', 'cat', 'frog', 'alien'].includes(selectedCharacter)) {
+    context.fillStyle = palette.body;
+    context.fillRect(player.x + 4, player.y, 6, 7);
+    context.fillRect(player.x + player.width - 10, player.y, 6, 7);
+  }
+
+  if (selectedCharacter === 'wizard') {
+    context.fillStyle = '#9a65b5';
+    context.fillRect(player.x + 1, player.y + 1, player.width - 2, 4);
+    context.fillRect(centerX - 3, player.y - 6, 6, 8);
+    context.fillStyle = '#f2c14e';
+    context.fillRect(centerX + 4, player.y - 3, 3, 3);
+  }
+
+  if (selectedCharacter === 'robot') {
+    context.fillStyle = '#9dd7c2';
+    context.fillRect(centerX - 2, player.y - 5, 4, 5);
+    context.fillRect(centerX - 5, player.y - 7, 10, 2);
+  }
+
+  if (selectedCharacter === 'knight') {
+    context.fillStyle = '#f3f1dc';
+    context.fillRect(player.x + 3, player.y + 1, player.width - 6, 4);
+    context.fillStyle = '#8c9fb2';
+    context.fillRect(player.x + player.width - 5, player.y + 7, 3, 8);
+  }
+
   context.fillStyle = '#f3f1dc';
-  context.fillRect(player.x + 17, player.y + 8, 5, 6);
-  context.fillStyle = '#e87552';
-  context.fillRect(player.x + 4, player.y + player.height - 5, 8, 5);
-  context.fillRect(player.x + 17, player.y + player.height - 5, 8, 5);
+  context.fillRect(player.x + 8, player.y + 10, 4, 5);
+  context.fillRect(player.x + player.width - 12, player.y + 10, 4, 5);
+  context.fillStyle = '#18252d';
+  context.fillRect(centerX - 3, player.y + 18, 6, 2);
+  context.fillStyle = palette.accent;
+  context.fillRect(player.x + 3, player.y + player.height - 5, 9, 5);
+  context.fillRect(player.x + player.width - 12, player.y + player.height - 5, 9, 5);
+  context.fillRect(player.x + 5, player.y + 23, player.width - 10, 3);
 }
 
 function drawHeart(x, y, size, filled) {
@@ -406,6 +469,24 @@ for (const [index, tab] of tabs.entries()) {
     const nextTab = tabs[(index + direction + tabs.length) % tabs.length];
     selectTab(nextTab);
     nextTab.focus();
+  });
+}
+
+function selectCharacter(card) {
+  selectedCharacter = card.dataset.character;
+  for (const characterCard of characterCards) {
+    const isSelected = characterCard === card;
+    characterCard.setAttribute('aria-pressed', String(isSelected));
+  }
+}
+
+for (const characterCard of characterCards) {
+  characterCard.addEventListener('click', () => selectCharacter(characterCard));
+  characterCard.addEventListener('keydown', (event) => {
+    if (!['Enter', ' '].includes(event.key)) return;
+
+    event.preventDefault();
+    selectCharacter(characterCard);
   });
 }
 

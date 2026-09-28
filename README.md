@@ -6,7 +6,7 @@ A keyboard-controlled browser platformer built with HTML, CSS, and the Canvas AP
 
 Open `index.html` in a web browser. No installation or build step is required.
 
-The starting screen has a **Play** tab with a **Start** button. The **Characters** tab is a placeholder for a future feature. Select **Start** to begin playing, or use **Quit** at the top of the game screen to return to the menu.
+The starting screen has a **Play** tab with a **Start** button and a **Characters** tab containing a roster of 20 labeled, pixel-art characters. Select a character before choosing **Start** to play as that character, or use **Quit** at the top of the game screen to return to the menu.
 
 ## Controls
 
