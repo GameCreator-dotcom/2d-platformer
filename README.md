@@ -1,6 +1,6 @@
 # 2D Platformer
 
-A small browser platformer built with HTML, CSS, and the Canvas API. Move and jump across procedurally generated platforms, then reach the flag to advance. Levels continue until you run out of lives.
+A keyboard-controlled browser platformer built with HTML, CSS, and the Canvas API. Jump across procedurally generated platforms, reach the flag, and keep going through an endless sequence of levels.
 
 ## Run the Game
 
@@ -16,9 +16,11 @@ Open `index.html` in a web browser. No installation or build step is required.
 | Retry or restart | R (after falling) |
 | Advance to the next level | Reach the flag |
 
-## Lives and Restarts
+## How Runs Work
 
-You can fall twice and press **R** to retry the current level. On the third fall, the game shows **GAME OVER**. Press **R** to start a fresh run and reset the death count. Each level is generated with a new platform layout, and a new run avoids layouts from the previous run.
+- Reach the flag to clear the level and continue to the next one.
+- You get three falls per run. Press **R** after the first two falls to retry the current level.
+- The third fall ends the run. Press **R** at game over to start again with a fresh set of layouts and reset the fall count. Layouts encountered in the previous run are not reused.
 
 ## Project Files
 
