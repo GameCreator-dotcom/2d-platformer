@@ -66,6 +66,147 @@ body {
   padding: 32px 20px;
 }
 
+#characters-panel {
+  display: block;
+  padding: 28px 16px 20px;
+}
+
+#characters-panel h1 {
+  margin-bottom: 24px;
+}
+
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.character-card {
+  min-width: 0;
+  padding: 8px 6px 10px;
+  border: 2px solid #f3f1dc;
+  background: #1b2d3c;
+  box-shadow: 3px 3px 0 #0d171c;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.character-card:hover,
+.character-card[aria-pressed="true"] {
+  transform: translate(-2px, -2px);
+  background: #365d4c;
+}
+
+.character-card[aria-pressed="true"] {
+  border-color: #f2c14e;
+  box-shadow: 5px 5px 0 #0d171c;
+}
+
+.character-portrait {
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+  border: 2px solid #18252d;
+  color: #18252d;
+  font: 500 11px 'DM Mono', monospace;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.character-sprite {
+  position: relative;
+  width: 34px;
+  height: 40px;
+  display: block;
+  background: #e87552;
+  box-shadow: 0 4px 0 #18252d, 0 8px 0 #18252d;
+  clip-path: polygon(18% 0, 35% 0, 42% 8%, 58% 8%, 65% 0, 82% 0, 82% 15%, 100% 15%, 100% 78%, 82% 78%, 82% 100%, 60% 100%, 60% 84%, 40% 84%, 40% 100%, 18% 100%, 18% 78%, 0 78%, 0 15%, 18% 15%);
+}
+
+.character-sprite::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 8px;
+  width: 4px;
+  height: 5px;
+  background: #f3f1dc;
+  box-shadow: 14px 0 0 #f3f1dc;
+}
+
+.character-sprite::after {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 23px;
+  width: 8px;
+  height: 3px;
+  background: #18252d;
+  box-shadow: -7px 12px 0 rgba(243, 241, 220, 0.45), 7px 12px 0 rgba(243, 241, 220, 0.45);
+}
+
+.character-card--robot .character-sprite { background: #6f8f9e; background-image: linear-gradient(#9dd7c2 0 12%, transparent 12% 76%, #365d4c 76%); clip-path: polygon(0 0, 100% 0, 100% 88%, 82% 88%, 82% 100%, 18% 100%, 18% 88%, 0 88%); }
+.character-card--frog .character-sprite { background: #47765c; background-image: radial-gradient(circle at 30% 78%, #bce4cb 0 8%, transparent 9%), radial-gradient(circle at 70% 78%, #bce4cb 0 8%, transparent 9%); border-radius: 45% 45% 25% 25%; }
+.character-card--knight .character-sprite { background: #66788d; background-image: linear-gradient(#f3f1dc 0 12%, transparent 12% 76%, #8c9fb2 76%); clip-path: polygon(15% 0, 85% 0, 100% 18%, 100% 84%, 78% 84%, 78% 100%, 22% 100%, 22% 84%, 0 84%, 0 18%); }
+.character-card--ghost .character-sprite { background: #f3f1dc; clip-path: polygon(15% 0, 85% 0, 100% 25%, 100% 100%, 75% 82%, 50% 100%, 25% 82%, 0 100%, 0 25%); }
+.character-card--cat .character-sprite { background: #e6a93c; background-image: linear-gradient(90deg, transparent 0 28%, #f3f1dc 28% 38%, transparent 38% 62%, #f3f1dc 62% 72%, transparent 72%); }
+.character-card--slime .character-sprite { background: #78a66c; border-radius: 50% 50% 20% 20%; }
+.character-card--bee .character-sprite { background: #f2c14e; background-image: linear-gradient(#18252d 0 20%, transparent 20% 40%, #18252d 40% 60%, transparent 60% 80%, #18252d 80%); }
+.character-card--wizard .character-sprite { background: #9a65b5; background-image: linear-gradient(135deg, transparent 0 42%, #f2c14e 43% 49%, transparent 50%); clip-path: polygon(50% 0, 100% 35%, 80% 35%, 80% 100%, 20% 100%, 20% 35%, 0 35%); }
+.character-card--golem .character-sprite { background: #8b7563; clip-path: polygon(12% 0, 88% 0, 100% 15%, 100% 88%, 75% 88%, 75% 100%, 25% 100%, 25% 88%, 0 88%, 0 15%); }
+.character-card--penguin .character-sprite { background: #365d4c; border-radius: 45% 45% 25% 25%; }
+.character-card--mushroom .character-sprite { background: #e87552; clip-path: polygon(0 35%, 15% 15%, 35% 0, 65% 0, 85% 15%, 100% 35%, 85% 48%, 85% 100%, 15% 100%, 15% 48%); }
+.character-card--dragon .character-sprite { background: #b84f58; clip-path: polygon(0 18%, 20% 18%, 28% 0, 42% 12%, 58% 12%, 72% 0, 80% 18%, 100% 18%, 100% 82%, 78% 82%, 78% 100%, 22% 100%, 22% 82%, 0 82%); }
+.character-card--pirate .character-sprite { background: #b56d3c; background-image: linear-gradient(#18252d 0 15%, transparent 15% 100%); }
+.character-card--bat .character-sprite { background: #765e91; clip-path: polygon(0 18%, 25% 28%, 50% 8%, 75% 28%, 100% 18%, 86% 100%, 14% 100%); }
+.character-card--alien .character-sprite { background: #4eaa7d; border-radius: 50% 50% 30% 30%; }
+.character-card--raccoon .character-sprite { background: #747981; background-image: linear-gradient(90deg, transparent 0 18%, #18252d 18% 82%, transparent 82%); }
+.character-card--merfolk .character-sprite { background: #3c9ca1; clip-path: polygon(50% 0, 85% 18%, 85% 76%, 100% 100%, 50% 84%, 0 100%, 15% 76%, 15% 18%); }
+.character-card--yeti .character-sprite { background: #b7d7dc; border-radius: 45% 45% 25% 25%; }
+.character-card--plant .character-sprite { background: #6c9b48; background-image: linear-gradient(90deg, transparent 0 44%, #f2c14e 44% 56%, transparent 56%); clip-path: polygon(20% 0, 35% 12%, 50% 0, 65% 12%, 80% 0, 80% 80%, 100% 100%, 0 100%, 20% 80%); }
+
+.character-card h2,
+.character-card p {
+  margin: 0;
+}
+
+.character-card h2 {
+  color: #f3f1dc;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.character-card p {
+  margin-top: 3px;
+  color: #c2cec0;
+  font: 10px 'DM Mono', monospace;
+  line-height: 1.2;
+}
+
+.character-card--fox .character-portrait { background: #e87552; }
+.character-card--robot .character-portrait { background: #9dd7c2; }
+.character-card--frog .character-portrait { background: #78a66c; }
+.character-card--knight .character-portrait { background: #8c9fb2; }
+.character-card--ghost .character-portrait { background: #f3f1dc; }
+.character-card--cat .character-portrait { background: #f2c14e; }
+.character-card--slime .character-portrait { background: #bce4cb; }
+.character-card--bee .character-portrait { background: #f2c14e; }
+.character-card--wizard .character-portrait { background: #d6a2e8; }
+.character-card--golem .character-portrait { background: #a88f78; }
+.character-card--penguin .character-portrait { background: #7fb4d5; }
+.character-card--mushroom .character-portrait { background: #e87552; }
+.character-card--dragon .character-portrait { background: #d96c6c; }
+.character-card--pirate .character-portrait { background: #e8b56a; }
+.character-card--bat .character-portrait { background: #9c89b8; }
+.character-card--alien .character-portrait { background: #79c7a2; }
+.character-card--raccoon .character-portrait { background: #9a9da3; }
+.character-card--merfolk .character-portrait { background: #71c4c6; }
+.character-card--yeti .character-portrait { background: #d9e9ec; }
+.character-card--plant .character-portrait { background: #a9c96f; }
+
 .menu-panel h1 {
   font-size: 36px;
   text-align: center;
@@ -84,7 +225,8 @@ body {
 }
 
 .menu-tab:focus-visible,
-.start-button:focus-visible {
+.start-button:focus-visible,
+.character-card:focus-visible {
   outline: 3px solid #9dd7c2;
   outline-offset: 4px;
 }
@@ -166,6 +308,10 @@ canvas {
 }
 
 @media (max-width: 560px) {
+  .character-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .game-heading {
     align-items: flex-start;
     flex-direction: column-reverse;
