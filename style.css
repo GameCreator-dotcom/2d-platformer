@@ -27,6 +27,76 @@ body {
   padding: 24px 0;
 }
 
+.menu-screen {
+  width: min(100%, 560px);
+  margin: 0 auto;
+  border: 3px solid #f3f1dc;
+  background: #263e54;
+  box-shadow: 7px 7px 0 #0d171c;
+}
+
+.menu-tabs {
+  display: flex;
+  border-bottom: 2px solid #f3f1dc;
+}
+
+.menu-tab {
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-right: 2px solid #f3f1dc;
+  background: transparent;
+  color: #c2cec0;
+  font: 500 13px 'DM Mono', monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.menu-tab[aria-selected="true"] {
+  background: #f2c14e;
+  color: #18252d;
+}
+
+.menu-panel {
+  min-height: 300px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 32px;
+  padding: 32px 20px;
+}
+
+.menu-panel h1 {
+  font-size: 36px;
+  text-align: center;
+}
+
+.start-button {
+  min-width: 150px;
+  min-height: 52px;
+  border: 2px solid #f3f1dc;
+  background: #e87552;
+  box-shadow: 4px 4px 0 #0d171c;
+  color: #18252d;
+  font: 500 16px 'DM Mono', monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.menu-tab:focus-visible,
+.start-button:focus-visible {
+  outline: 3px solid #9dd7c2;
+  outline-offset: 4px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.game-screen {
+  width: 100%;
+}
+
 .game-heading {
   display: flex;
   align-items: baseline;
@@ -35,17 +105,36 @@ body {
   margin-bottom: 12px;
 }
 
-.eyebrow,
+.game-stage {
+  position: relative;
+}
+
+.quit-button {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  left: 50%;
+  min-width: 104px;
+  min-height: 40px;
+  transform: translateX(-50%);
+  border: 2px solid #f3f1dc;
+  background: #e87552;
+  box-shadow: 3px 3px 0 #0d171c;
+  color: #18252d;
+  font: 500 13px 'DM Mono', monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.quit-button:focus-visible {
+  outline: 3px solid #9dd7c2;
+  outline-offset: 4px;
+}
+
 .controls {
   font-family: 'DM Mono', monospace;
   font-size: 12px;
   letter-spacing: 0;
-}
-
-.eyebrow {
-  margin: 0;
-  color: #9db8a5;
-  text-transform: uppercase;
 }
 
 h1 {
