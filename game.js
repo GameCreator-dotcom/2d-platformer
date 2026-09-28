@@ -9,9 +9,11 @@ const world = {
   jumpSpeed: 520,
 };
 
+const spawnPoint = { x: 64, y: 300 };
+const maxDeaths = 3;
 const player = {
-  x: 64,
-  y: 300,
+  x: spawnPoint.x,
+  y: spawnPoint.y,
   width: 28,
   height: 36,
   velocityX: 0,
@@ -20,7 +22,7 @@ const player = {
 };
 
 const platforms = [
-  { x: 0, y: 408, width: 800, height: 42 },
+  { x: 0, y: 408, width: 144, height: 42 },
   { x: 176, y: 332, width: 142, height: 18 },
   { x: 376, y: 270, width: 142, height: 18 },
   { x: 578, y: 326, width: 132, height: 18 },
@@ -29,10 +31,22 @@ const platforms = [
 const keys = new Set();
 const jumpKeys = new Set(['Space', 'ArrowUp', 'KeyW']);
 let previousTime = 0;
+let isDead = false;
+let deathCount = 0;
 
 window.addEventListener('keydown', (event) => {
   if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'Space'].includes(event.code)) {
     event.preventDefault();
+  }
+
+  if (event.repeat) return;
+
+  if (isDead) {
+    if (event.code === 'KeyR') {
+      if (deathCount >= maxDeaths) restartGame();
+      else restartLevel();
+    }
+    return;
   }
 
   const isNewPress = !keys.has(event.code);
@@ -48,8 +62,14 @@ window.addEventListener('keyup', (event) => {
   keys.delete(event.code);
 });
 
-window.addEventListener('blur', () => {
+function clearKeys() {
   keys.clear();
+}
+
+window.addEventListener('blur', clearKeys);
+window.addEventListener('focus', clearKeys);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) clearKeys();
 });
 
 function overlaps(first, second) {
@@ -128,17 +148,59 @@ function drawPlayer() {
   context.fillRect(player.x + 17, player.y + player.height - 5, 8, 5);
 }
 
+function die() {
+  isDead = true;
+  deathCount += 1;
+  player.velocityX = 0;
+  player.velocityY = 0;
+  keys.clear();
+}
+
+function restartLevel() {
+  player.x = spawnPoint.x;
+  player.y = spawnPoint.y;
+  player.velocityX = 0;
+  player.velocityY = 0;
+  player.onGround = false;
+  isDead = false;
+  keys.clear();
+}
+
+function restartGame() {
+  deathCount = 0;
+  restartLevel();
+}
+
 function draw() {
   drawBackground();
   drawPlatforms();
   drawPlayer();
+
+  if (isDead) {
+    context.fillStyle = 'rgba(13, 23, 28, 0.82)';
+    context.fillRect(0, 0, world.width, world.height);
+    context.textAlign = 'center';
+    context.fillStyle = '#f3f1dc';
+    context.font = 'bold 32px monospace';
+    context.fillText(deathCount >= maxDeaths ? 'GAME OVER' : 'YOU FELL', world.width / 2, world.height / 2 - 8);
+    context.fillStyle = '#f2c14e';
+    context.font = '16px monospace';
+    const message = deathCount >= maxDeaths
+      ? 'Press R to restart the game'
+      : `Deaths: ${deathCount} / ${maxDeaths} - Press R to try again`;
+    context.fillText(message, world.width / 2, world.height / 2 + 28);
+    context.textAlign = 'start';
+  }
 }
 
 function frame(time) {
   const deltaTime = Math.min((time - previousTime) / 1000 || 0, 1 / 30);
   previousTime = time;
 
-  movePlayer(deltaTime);
+  if (!isDead) {
+    movePlayer(deltaTime);
+    if (player.y > world.height) die();
+  }
   draw();
   requestAnimationFrame(frame);
 }
